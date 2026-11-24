@@ -1,0 +1,41 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download Urdu fonts (Noto Nastaliq Urdu, Noto Naskh Arabic – SIL Open Font License)
+        shell: bash
+        continue-on-error: true
+        run: |
+          mkdir -p public/fonts
+          curl -fL -o public/fonts/NotoNastaliqUrdu.ttf "https://github.com/google/fonts/raw/main/ofl/notonastaliqurdu/NotoNastaliqUrdu%5Bwght%5D.ttf"
+          curl -fL -o public/fonts/NotoNaskhArabic.ttf "https://github.com/google/fonts/raw/main/ofl/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf"
+          ls -la public/fonts
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build installer
+        run: npm run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: SubahBakhairStudio-Windows
+          path: |
+            release/*.exe
+          if-no-files-found: error

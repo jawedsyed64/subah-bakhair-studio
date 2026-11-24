@@ -1,0 +1,46 @@
+{
+  "name": "subah-bakhair-studio",
+  "productName": "Subah Bakhair Studio",
+  "version": "0.1.0",
+  "description": "Good Morning Message Maker – Subah Bakhair Studio: AI-powered Urdu greeting picture creator for Windows",
+  "author": "jawedsyed64",
+  "private": true,
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "electron .",
+    "dist": "vite build && electron-builder --win --publish never"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.11"
+  },
+  "build": {
+    "appId": "com.jawedsyed64.subahbakhair",
+    "productName": "Subah Bakhair Studio",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "electron/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Subah Bakhair Studio"
+    }
+  }
+}
